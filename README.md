@@ -34,8 +34,6 @@ The architecture diagram illustrates the research pipeline from financial data i
 
 ![RiskAware-InvestLM-Lite Project Architecture](Screenshots/Project%20Architecture.jpeg)
 
-> **Note:** The supplied architecture image includes a “LLaMA 65B” label, while the research paper describes an LLaMA-8B / Finance-Llama-8B foundation model. Confirm and align this label with the final implementation if the difference is unintended.
-
 ## Objectives
 
 - Identify and summarize risk factors in financial disclosures.
