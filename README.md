@@ -152,6 +152,8 @@ Source Context
 --------------
 [Relevant evidence or excerpt supporting the assessment.]
 ```
+![InvestLM Financial Risk Chat Dashboard](Screenshots/InvestLM%20Financial%20Risk%20Chat%20Dashboard.png)
+
 
 The actual output fields may vary depending on the input and implementation.
 
