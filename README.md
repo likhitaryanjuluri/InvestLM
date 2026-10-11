@@ -26,6 +26,22 @@ RiskAware-InvestLM-Lite aims to help users analyze this information by convertin
 
 The intended workflow accepts either a financial question or an excerpt from an SEC filing and returns a structured analysis grounded in the supplied text.
 
+## Screenshots
+
+### InvestLM Financial Risk Chat Dashboard
+
+The interface lets a user submit a finance-related question and review the model's response in a chat-style dashboard.
+
+![InvestLM Financial Risk Chat Dashboard](InvestLM/Screenshots/InvestLM Financial Rish Chat Dashboard.png)
+
+### Project Architecture
+
+The architecture diagram illustrates the research pipeline from financial data inputs and preprocessing through model adaptation, fine-tuning, inference, and output visualization.
+
+![RiskAware-InvestLM-Lite Project Architecture](InvestLM/Screenshots/project-architecture.jpeg)
+
+> **Note:** The supplied architecture image includes a “LLaMA 65B” label, while the research paper describes an LLaMA-8B / Finance-Llama-8B foundation model. Confirm and align this label with the final implementation if the difference is unintended.
+
 ## Objectives
 
 - Identify and summarize risk factors in financial disclosures.
@@ -165,6 +181,9 @@ The research paper does not specify a definitive source-code layout. If you are 
 ```text
 RiskAware-InvestLM-Lite/
 ├── README.md
+├── assets/
+│   ├── investlm-chat-dashboard.png
+│   └── investlm-project-architecture.jpeg
 ├── data/                 # Prepared datasets (do not commit restricted data)
 ├── notebooks/            # Experiments and analysis
 ├── src/
@@ -197,6 +216,14 @@ The paper discusses qualitative findings, including structured risk extraction a
 ## Research Context
 
 The paper situates this work in relation to finance-focused NLP and language-model research, including Financial PhraseBank, FiQA, FinBERT, LoRA, FinQA, ECTSum, FinRL, Alpaca, AlpacaFarm, BloombergGPT, FinMA/Pixiu, and FinGPT.
+
+## Authors
+
+- B. Dhanraj
+- J. Likhit Aryan
+- R. Remo Reddy
+- K. Tarun Naidu
+- V. V. N. M. G. Karthik
 
 ## Disclaimer
 
