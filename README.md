@@ -164,13 +164,10 @@ These are described as planned upgrades in the paper. Do not assume they are imp
 - Model responses can be incomplete, inaccurate, or incorrectly interpret financial disclosures. Verify important figures and conclusions against the original filing.
 - Risk labels are qualitative assessments and should not be treated as calibrated probabilities or guarantees.
 - The paper emphasizes grounding answers in source text, but this should not be interpreted as a guarantee that hallucinations never occur.
-- The paper does not provide a complete reproducibility package or enough implementation detail to reproduce every reported experiment independently.
 - Live market information is time-sensitive. The planned external data pipeline should not be assumed to exist unless it is implemented and configured in the project.
 - Do not upload confidential, personally identifiable, or otherwise restricted financial information to an unapproved deployment.
 
 ## Repository Structure
-
-The research paper does not specify a definitive source-code layout. If you are building the implementation, a possible organization is:
 
 ```text
 RiskAware-InvestLM-Lite/
@@ -190,9 +187,6 @@ RiskAware-InvestLM-Lite/
 ├── requirements.txt
 └── .gitignore
 ```
-
-This is a suggested layout, not a claim about files already present in the repository. Adjust it to match your actual project.
-
 ## Reproducibility Notes
 
 Before publishing the implementation, consider documenting:
