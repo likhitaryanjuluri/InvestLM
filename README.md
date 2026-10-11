@@ -1,208 +1,203 @@
+# RiskAware-InvestLM-Lite
 
----
-base_model: tarun7r/Finance-Llama-8B
-library_name: peft
-pipeline_tag: text-generation
-tags:
-- base_model:adapter:tarun7r/Finance-Llama-8B
-- lora
-- transformers
----
+**A structured, risk-aware financial language model for SEC filing analysis and investment-oriented insights.**
 
-# Model Card for Model ID
+RiskAware-InvestLM-Lite is a research project focused on adapting a large language model to understand financial disclosures and produce structured risk assessments. The paper describes instruction-tuning a LLaMA-8B/Finance-Llama-8B foundation model using curated financial instructions, especially market-risk disclosures from SEC 10-K filings (Item 7A), with parameter-efficient fine-tuning through Low-Rank Adaptation (LoRA).
 
-<!-- Provide a quick summary of what the model is/does. -->
+## Table of Contents
 
+- [Overview](#overview)
+- [Objectives](#objectives)
+- [Key Features](#key-features)
+- [How It Works](#how-it-works)
+- [Training Configuration](#training-configuration)
+- [Expected Output](#expected-output)
+- [Planned Extensions](#planned-extensions)
+- [Limitations and Responsible Use](#limitations-and-responsible-use)
+- [Repository Structure](#repository-structure)
+- [Reproducibility Notes](#reproducibility-notes)
+- [Research Context](#research-context)
 
+## Overview
 
-## Model Details
+Financial reports contain extensive information about market exposure, debt obligations, interest-rate changes, currency fluctuations, liquidity, and credit-related uncertainty. Manually reviewing these disclosures can be time-consuming.
 
-### Model Description
+RiskAware-InvestLM-Lite aims to help users analyze this information by converting financial text into concise, structured outputs. Its primary training source is **Item 7A — Quantitative and Qualitative Disclosures About Market Risk** in SEC 10-K filings. The paper also describes a compact set of general finance instructions to support questions about investment concepts, valuation, risk management, and market events.
 
-<!-- Provide a longer summary of what this model is. -->
+The intended workflow accepts either a financial question or an excerpt from an SEC filing and returns a structured analysis grounded in the supplied text.
 
+## Objectives
 
+- Identify and summarize risk factors in financial disclosures.
+- Classify risks into useful categories.
+- Assign qualitative risk-severity levels such as **Low**, **Medium**, or **High**.
+- Extract important financial metrics and dates mentioned in the source text.
+- Explain the evidence behind the risk assessment.
+- Support general finance questions and financial-text summarization.
+- Explore efficient domain adaptation without full-model fine-tuning.
 
-- **Developed by:** [More Information Needed]
-- **Funded by [optional]:** [More Information Needed]
-- **Shared by [optional]:** [More Information Needed]
-- **Model type:** [More Information Needed]
-- **Language(s) (NLP):** [More Information Needed]
-- **License:** [More Information Needed]
-- **Finetuned from model [optional]:** [More Information Needed]
+## Key Features
 
-### Model Sources [optional]
+- **SEC Item 7A analysis:** Focuses on market-risk disclosures in SEC 10-K filings.
+- **Structured risk assessment:** Organizes findings by severity, category, metrics, and explanation.
+- **Risk categorization:** Covers categories discussed in the paper, including market, credit, liquidity, and operational risks.
+- **Financial metric extraction:** Aims to surface relevant amounts, interest rates, maturity dates, debt balances, and related indicators when present in the source.
+- **General finance Q&A:** Supports finance-related questions and summaries.
+- **LoRA-based adaptation:** Uses trainable low-rank adapters to reduce the number of parameters updated during fine-tuning.
+- **Interactive interface concept:** The paper describes a UI for entering questions or submitting filing excerpts and viewing organized responses.
 
-<!-- Provide the basic links for the model. -->
+## How It Works
 
-- **Repository:** [More Information Needed]
-- **Paper [optional]:** [More Information Needed]
-- **Demo [optional]:** [More Information Needed]
+### 1. Data collection
 
-## Uses
+The core dataset is built from SEC 10-K Item 7A passages. These disclosures contain standardized information about financial-market exposures and related risks. A smaller collection of general finance instructions complements the regulatory material.
 
-<!-- Address questions around how the model is intended to be used, including the foreseeable users of the model and those affected by the model. -->
+### 2. Data preprocessing
 
-### Direct Use
+The described preprocessing pipeline:
 
-<!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
+1. Removes formatting noise such as unwanted line breaks, numbering artifacts, table remnants, and OCR irregularities.
+2. Normalizes numerical expressions where needed to reduce ambiguity.
+3. Splits long documents into semantically coherent passages that fit within the model's context limits.
+4. Converts each passage into an instruction–response example.
+5. Tokenizes the prepared examples with the LLaMA-8B SentencePiece tokenizer.
 
-[More Information Needed]
+### 3. Instruction tuning
 
-### Downstream Use [optional]
+Each financial passage is paired with an instruction asking the model to analyze the text and produce structured information. The target response can include risk severity, risk categories, key metrics, and a concise explanation.
 
-<!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
+The paper describes using human annotation and model-assisted paraphrasing for supplementary finance instructions, with verification for correctness and consistency.
 
-[More Information Needed]
+### 4. Parameter-efficient fine-tuning
 
-### Out-of-Scope Use
+The model is adapted using **Low-Rank Adaptation (LoRA)**. Rather than updating all base-model weights, LoRA adds trainable low-rank matrices to selected attention projection layers. This is intended to reduce training memory requirements and computational cost.
 
-<!-- This section addresses misuse, malicious use, and uses that the model will not work well for. -->
+### 5. Inference
 
-[More Information Needed]
+At inference time, the user supplies a finance question or a financial passage. The tuned model generates an organized response containing the relevant risk assessment, categories, metrics, and narrative explanation.
 
-## Bias, Risks, and Limitations
+```text
+Financial question or SEC filing excerpt
+                 |
+                 v
+       Text preparation / input
+                 |
+                 v
+   Finance-adapted LLaMA model + LoRA
+                 |
+                 v
+       Structured financial analysis
+                 |
+                 +-- Risk severity
+                 +-- Risk categories
+                 +-- Relevant metrics and dates
+                 +-- Evidence-based explanation
+```
 
-<!-- This section is meant to convey both technical and sociotechnical limitations. -->
+## Training Configuration
 
-[More Information Needed]
+The paper reports the following LoRA and optimization settings:
 
-### Recommendations
+| Setting | Value reported in the paper |
+|---|---|
+| Foundation model | LLaMA-8B / Finance-Llama-8B (the paper uses both names) |
+| Adaptation method | LoRA (Low-Rank Adaptation) |
+| LoRA rank (`r`) | 8 |
+| LoRA alpha | 16 |
+| LoRA dropout | 0.05 |
+| Target projection layers | Primarily query and value projections |
+| Optimizer | AdamW |
+| Learning rate | `2e-4` |
+| Precision | Mixed precision |
+| Validation | A small validation split is used to monitor loss and overfitting |
 
-<!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
+The paper does not specify all details needed to reproduce training, such as the exact dataset size and split, epoch count, batch size, sequence length, hardware, software versions, or complete training scripts.
 
-Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.
+## Expected Output
 
-## How to Get Started with the Model
+The system is designed to return an interpretable report rather than an unstructured answer. A conceptual output format is shown below; it is illustrative and is **not** a measured result or a verbatim model response.
 
-Use the code below to get started with the model.
+```text
+Risk Assessment
+---------------
+Risk Severity: [Low / Medium / High]
+Risk Categories: [Market / Credit / Liquidity / Operational / Other]
 
-[More Information Needed]
+Key Metrics
+-----------
+- [Metric or amount stated in the source]
+- [Relevant rate, date, debt balance, or exposure stated in the source]
 
-## Training Details
+Analysis
+--------
+[Brief explanation of the risk factors, grounded in the supplied passage.]
 
-### Training Data
+Source Context
+--------------
+[Relevant evidence or excerpt supporting the assessment.]
+```
 
-<!-- This should link to a Dataset Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
+The actual output fields may vary depending on the input and implementation.
 
-[More Information Needed]
+## Planned Extensions
 
-### Training Procedure
+The paper identifies two intended extensions to make the system more useful in dynamic market settings:
 
-<!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
+- **Live financial data pipeline:** Connect external APIs to provide current stock prices, financial news, and financial ratios.
+- **Interactive web chatbot:** Provide a user-friendly web interface rather than relying only on a command-line workflow.
 
-#### Preprocessing [optional]
+These are described as planned upgrades in the paper. Do not assume they are implemented or operational unless the repository contains the corresponding code and configuration.
 
-[More Information Needed]
+## Limitations and Responsible Use
 
+- This is a research-oriented decision-support concept, not a substitute for professional financial, legal, or investment advice.
+- Model responses can be incomplete, inaccurate, or incorrectly interpret financial disclosures. Verify important figures and conclusions against the original filing.
+- Risk labels are qualitative assessments and should not be treated as calibrated probabilities or guarantees.
+- The paper emphasizes grounding answers in source text, but this should not be interpreted as a guarantee that hallucinations never occur.
+- The paper does not provide a complete reproducibility package or enough implementation detail to reproduce every reported experiment independently.
+- Live market information is time-sensitive. The planned external data pipeline should not be assumed to exist unless it is implemented and configured in the project.
+- Do not upload confidential, personally identifiable, or otherwise restricted financial information to an unapproved deployment.
 
-#### Training Hyperparameters
+## Repository Structure
 
-- **Training regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
+The research paper does not specify a definitive source-code layout. If you are building the implementation, a possible organization is:
 
-#### Speeds, Sizes, Times [optional]
+```text
+RiskAware-InvestLM-Lite/
+├── README.md
+├── data/                 # Prepared datasets (do not commit restricted data)
+├── notebooks/            # Experiments and analysis
+├── src/
+│   ├── preprocessing/    # Filing cleaning and segmentation
+│   ├── training/          # LoRA fine-tuning pipeline
+│   ├── inference/         # Model inference and response formatting
+│   └── app/               # Optional web interface
+├── configs/               # Training and application configuration
+├── tests/
+├── requirements.txt
+└── .gitignore
+```
 
-<!-- This section provides information about throughput, start/end time, checkpoint size if relevant, etc. -->
+This is a suggested layout, not a claim about files already present in the repository. Adjust it to match your actual project.
 
-[More Information Needed]
+## Reproducibility Notes
 
-## Evaluation
+Before publishing the implementation, consider documenting:
 
-<!-- This section describes the evaluation protocols and provides the results. -->
+- The exact base-model identifier and its license/access requirements.
+- Dataset sources, preprocessing rules, data splits, and any licensing or redistribution restrictions.
+- Python, CUDA, PyTorch, Transformers, PEFT, and other dependency versions.
+- Complete training hyperparameters, hardware, random seeds, and evaluation procedures.
+- How LoRA adapters or checkpoints are obtained and loaded.
+- How to launch the inference pipeline or UI, including required environment variables.
+- Evaluation datasets, baselines, quantitative metrics, and known failure cases.
 
-### Testing Data, Factors & Metrics
+The paper discusses qualitative findings, including structured risk extraction and general finance question answering, but this README does not invent numerical benchmark scores that are not reported in the available paper text.
 
-#### Testing Data
+## Research Context
 
-<!-- This should link to a Dataset Card if possible. -->
+The paper situates this work in relation to finance-focused NLP and language-model research, including Financial PhraseBank, FiQA, FinBERT, LoRA, FinQA, ECTSum, FinRL, Alpaca, AlpacaFarm, BloombergGPT, FinMA/Pixiu, and FinGPT.
 
-[More Information Needed]
+## Disclaimer
 
-#### Factors
-
-<!-- These are the things the evaluation is disaggregating by, e.g., subpopulations or domains. -->
-
-[More Information Needed]
-
-#### Metrics
-
-<!-- These are the evaluation metrics being used, ideally with a description of why. -->
-
-[More Information Needed]
-
-### Results
-
-[More Information Needed]
-
-#### Summary
-
-
-
-## Model Examination [optional]
-
-<!-- Relevant interpretability work for the model goes here -->
-
-[More Information Needed]
-
-## Environmental Impact
-
-<!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
-
-Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
-
-- **Hardware Type:** [More Information Needed]
-- **Hours used:** [More Information Needed]
-- **Cloud Provider:** [More Information Needed]
-- **Compute Region:** [More Information Needed]
-- **Carbon Emitted:** [More Information Needed]
-
-## Technical Specifications [optional]
-
-### Model Architecture and Objective
-
-[More Information Needed]
-
-### Compute Infrastructure
-
-[More Information Needed]
-
-#### Hardware
-
-[More Information Needed]
-
-#### Software
-
-[More Information Needed]
-
-## Citation [optional]
-
-<!-- If there is a paper or blog post introducing the model, the APA and Bibtex information for that should go in this section. -->
-
-**BibTeX:**
-
-[More Information Needed]
-
-**APA:**
-
-[More Information Needed]
-
-## Glossary [optional]
-
-<!-- If relevant, include terms and calculations in this section that can help readers understand the model or model card. -->
-
-[More Information Needed]
-
-## More Information [optional]
-
-[More Information Needed]
-
-## Model Card Authors [optional]
-
-[More Information Needed]
-
-## Model Card Contact
-
-[More Information Needed]
-### Framework versions
-
-- PEFT 0.18.0
+This repository describes an academic research project. Outputs are for research and informational purposes only and should not be considered personalized investment recommendations. Always independently verify financial information and consult a qualified professional where appropriate.
