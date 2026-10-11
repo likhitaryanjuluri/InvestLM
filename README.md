@@ -32,13 +32,13 @@ The intended workflow accepts either a financial question or an excerpt from an 
 
 The interface lets a user submit a finance-related question and review the model's response in a chat-style dashboard.
 
-![InvestLM Financial Risk Chat Dashboard](InvestLM/Screenshots/InvestLM Financial Rish Chat Dashboard.png)
+![InvestLM Financial Risk Chat Dashboard](Screenshots/InvestLM%20Financial%20Risk%20Chat%20Dashboard.png)
 
 ### Project Architecture
 
 The architecture diagram illustrates the research pipeline from financial data inputs and preprocessing through model adaptation, fine-tuning, inference, and output visualization.
 
-![RiskAware-InvestLM-Lite Project Architecture](InvestLM/Screenshots/project-architecture.jpeg)
+![RiskAware-InvestLM-Lite Project Architecture](Screenshots/Project%20Architecture.jpeg)
 
 > **Note:** The supplied architecture image includes a “LLaMA 65B” label, while the research paper describes an LLaMA-8B / Finance-Llama-8B foundation model. Confirm and align this label with the final implementation if the difference is unintended.
 
@@ -181,9 +181,9 @@ The research paper does not specify a definitive source-code layout. If you are 
 ```text
 RiskAware-InvestLM-Lite/
 ├── README.md
-├── assets/
-│   ├── investlm-chat-dashboard.png
-│   └── investlm-project-architecture.jpeg
+├── Screenshots/
+│   ├── InvestLM Financial Risk Chat Dashboard.png
+│   └── Project Architecture.jpeg
 ├── data/                 # Prepared datasets (do not commit restricted data)
 ├── notebooks/            # Experiments and analysis
 ├── src/
@@ -216,14 +216,6 @@ The paper discusses qualitative findings, including structured risk extraction a
 ## Research Context
 
 The paper situates this work in relation to finance-focused NLP and language-model research, including Financial PhraseBank, FiQA, FinBERT, LoRA, FinQA, ECTSum, FinRL, Alpaca, AlpacaFarm, BloombergGPT, FinMA/Pixiu, and FinGPT.
-
-## Authors
-
-- B. Dhanraj
-- J. Likhit Aryan
-- R. Remo Reddy
-- K. Tarun Naidu
-- V. V. N. M. G. Karthik
 
 ## Disclaimer
 
