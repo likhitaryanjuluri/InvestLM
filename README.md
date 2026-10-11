@@ -28,12 +28,6 @@ The intended workflow accepts either a financial question or an excerpt from an 
 
 ## Screenshots
 
-### InvestLM Financial Risk Chat Dashboard
-
-The interface lets a user submit a finance-related question and review the model's response in a chat-style dashboard.
-
-![InvestLM Financial Risk Chat Dashboard](Screenshots/InvestLM%20Financial%20Risk%20Chat%20Dashboard.png)
-
 ### Project Architecture
 
 The architecture diagram illustrates the research pipeline from financial data inputs and preprocessing through model adaptation, fine-tuning, inference, and output visualization.
